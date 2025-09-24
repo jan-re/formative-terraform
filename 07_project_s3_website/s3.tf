@@ -2,6 +2,20 @@ resource "aws_s3_bucket" "s3_bucket" {
   bucket = "jan-re-s3-website-host"
 }
 
+resource "aws_s3_object" "s3_index" {
+  bucket       = aws_s3_bucket.s3_bucket.id
+  key          = "index.html"
+  source       = "html/index.html"
+  content_type = "text/html"
+}
+
+resource "aws_s3_object" "s3_error" {
+  bucket       = aws_s3_bucket.s3_bucket.id
+  key          = "error.html"
+  source       = "html/error.html"
+  content_type = "text/html"
+}
+
 resource "aws_s3_bucket_public_access_block" "s3_public_access" {
   bucket = aws_s3_bucket.s3_bucket.id
 
@@ -26,17 +40,16 @@ resource "aws_s3_bucket_policy" "read_only" {
       }
     ]
   })
-
 }
 
-# resource "aws_s3_bucket_website_configuration" "s3_website_config" {
-#   bucket = aws_s3_bucket.s3_bucket.id
+resource "aws_s3_bucket_website_configuration" "static_website" {
+  bucket = aws_s3_bucket.s3_bucket.id
 
-#   index_document {
-#     suffix = "index.html"
-#   }
+  index_document {
+    suffix = "index.html"
+  }
 
-#   error_document {
-#     key = "error.html"
-#   }
-# }
+  error_document {
+    key = "error.html"
+  }
+}
