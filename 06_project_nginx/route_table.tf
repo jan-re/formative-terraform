@@ -6,9 +6,7 @@ resource "aws_route_table" "route_table" {
     gateway_id = aws_internet_gateway.gateway.id
   }
 
-  tags = {
-    Project = "nginx"
-  }
+  tags = local.common_tags
 }
 
 resource "aws_route_table_association" "subnet_public" {
